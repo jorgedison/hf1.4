@@ -1,0 +1,85 @@
+version: '2'
+
+services:
+  
+  orderer.acme.com:
+    container_name: orderer.acme.com
+    image: hyperledger/fabric-orderer
+    enviroment: 
+      - ORDERER_GENERAL_LOGLEVEL=info
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      #enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    volumes:
+      - ../channel-artifacts/genesis.block: /var/hyperledger/orderer/orderer.genesis.block
+      - ../crypto-config/ordererOrganizations/acme.com/orderers/orderer.acme.com/msp: /var/hyperledger/orderer/msp
+      - ../crypto-config/ordererOrganizations/acme.com/orderers/orderer.acme.com/tls: /var/hyperledger/orderer/tls
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    ports:
+      - 7050:7050
+
+  peer0.org1.acme-com:
+    container_name: peer0.org1.acme.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    enviroment:
+      - CORE_PEER_ID=peer0.org1.acme.com
+      - CORE_PEER_ADDRESS=peer0.org1.acme.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.acme.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.acme.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+      - /var/run/: /host/var/run
+      - ../crypto-config/peerOrganizations/org1.acme.com/peers/peer0.org1.acme.com/msp: /etc/hyperledger/fabric/msp
+      - ../crypto-config/peerOrganizations/org1.acme.com/peers/peer0.org1.acme.com/tls: /etc/hyperledger/fabric/tls
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer0.org2.acme-com:
+    container_name: peer0.org2.acme.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    enviroment:
+      - CORE_PEER_ID=peer0.org2.acme.com
+      - CORE_PEER_ADDRESS=peer0.org2.acme.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.acme.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.acme.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+    volumes:
+      - /var/run/: /host/var/run
+      - ../crypto-config/peerOrganizations/org2.acme.com/peers/peer0.org2.acme.com/msp: /etc/hyperledger/fabric/msp
+      - ../crypto-config/peerOrganizations/org2.acme.com/peers/peer0.org2.acme.com/tls: /etc/hyperledger/fabric/tls
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer0.org3.acme-com:
+    container_name: peer0.org3.acme.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    enviroment:
+      - CORE_PEER_ID=peer0.org3.acme.com
+      - CORE_PEER_ADDRESS=peer0.org3.acme.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org3.acme.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org3.acme.com:7051
+      - CORE_PEER_LOCALMSPID=Org3MSP
+    volumes:
+      - /var/run/: /host/var/run
+      - ../crypto-config/peerOrganizations/org3.acme.com/peers/peer0.org3.acme.com/msp: /etc/hyperledger/fabric/msp
+      - ../crypto-config/peerOrganizations/org3.acme.com/peers/peer0.org3.acme.com/tls: /etc/hyperledger/fabric/tls
+    ports:
+      - 7051:7051
+      - 7053:7053
+
