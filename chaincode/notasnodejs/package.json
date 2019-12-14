@@ -1,0 +1,26 @@
+{
+  "name": "notasnodejs",
+  "version": "1.0.0",
+  "description": "Prueba chaincode con nodejs",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "nyc mocha --recursive",
+    "start": "fabric-chaincode-node start"
+  },
+  "author": "Jorge Rodriguez",
+  "license": "ISC",
+  "dependencies": {
+    "fabric-contract-api": "^1.4.4",
+    "fabric-shim": "^1.4.4"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2",
+    "sinon": "^6.0.0",
+    "sinon-chai": "^3.2.0"
+  }
+}
