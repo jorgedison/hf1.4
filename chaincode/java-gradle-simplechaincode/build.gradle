@@ -1,0 +1,32 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '2.0.3' //Gradle plugin to create fat/uber JARs, apply file transforms, and relocate packages for applications and libraries. Gradle version of Maven's Shade plugin. https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow  http://imperceptiblethoughts.com/shadow/    Github: https://github.com/johnrengelman/shadow
+    id 'java'
+}
+
+group 'io.fledger.fabric.chaincode'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+//https://github.com/hyperledger/fabric-chaincode-java/tree/release-1.4/fabric-chaincode-shim
+dependencies {
+    //compile group: 'org.hyperledger.fabric-chaincode-java', name: 'fabric-chaincode-shim', version: '1.+'
+    compile group: 'org.hyperledger.fabric-chaincode-java', name: 'fabric-chaincode-shim', version: '1.4.1'
+   // compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+shadowJar {
+    baseName = 'chaincode'
+    version = null
+    classifier = null
+
+    manifest {
+        attributes 'Main-Class': 'io.fledger.fabric.chaincode.SimpleChaincode'
+    }
+}
