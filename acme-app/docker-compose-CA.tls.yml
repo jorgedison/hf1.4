@@ -1,0 +1,33 @@
+# Copyright Business Blockchain www.blockchainempresarial.com. All Rights Reserved.
+# Autor: Ricardo Ruano, ricardo@business-blockchain.org
+# Date: 25-03-2019
+# EG: https://github.com/hyperledger/composer/blob/master/packages/composer-tests-functional/hlfv1/docker-compose.tls.yml
+# SPDX-License-Identifier: Apache-2.0
+#
+version: '2'
+
+networks:
+  basic:
+    external:
+      name: acmenetwork_basic
+
+services:
+  ca.org1.acme.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.org1.acme.com
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-tls/tlsca.org1.acme.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-tls/7901885fc54f9f937ab66c0e9027a74084d9e3f815dc54c49834ff960c8737d5_sk
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.acme.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/837da2ff9133209a766ad08d2658be810c98f0bd9a3abc626b61c5351b63c472_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw'
+    volumes:
+      - ../acme-network/crypto-config/peerOrganizations/org1.acme.com/tlsca/:/etc/hyperledger/fabric-ca-server-tls
+      - ../acme-network/crypto-config/peerOrganizations/org1.acme.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.org1.acme.com
+    networks:
+      - basic

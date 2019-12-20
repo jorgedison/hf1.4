@@ -1,0 +1,57 @@
+name: "Org1 Client"
+version: "1.0"
+client:
+  organization: Org1
+  credentialStore:
+    path: "./hfc-key-store"
+    cryptoStore:
+      path: "./hfc-key-store"
+channels:
+  marketplace:
+    orderers:
+      - orderer.acme.com
+    peers:
+      peer0.org1.acme.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+organizations:
+  Org1:
+    mspid: Org1MSP
+    peers:
+      - peer0.org1.acme.com
+    certificateAuthorities:
+      - ca.org1.acme.com
+    adminPrivateKey:
+      path: ../acme-network/crypto-config/peerOrganizations/org1.acme.com/users/Admin@org1.acme.com/msp/keystore/0bb313aeb5a4549fa63c5ebb02cdd31b4abcbb5101b8bfff3ba0bed0f30918a2_sk
+    signedCert:
+      path: ../acme-network/crypto-config/peerOrganizations/org1.acme.com/users/Admin@org1.acme.com/msp/signcerts/Admin@org1.acme.com-cert.pem
+orderers:
+  orderer.acme.com:
+    url: grpcs://localhost:7050
+    grpcOptions:
+      ssl-target-name-override: orderer.acme.com
+      grpc-max-send-message-length: 150
+    tlsCACerts:
+      path: ../acme-network/crypto-config/ordererOrganizations/acme.com/msp/tlscacerts/tlsca.acme.com-cert.pem
+peers:
+  peer0.org1.acme.com:
+    url: grpcs://localhost:7051
+    eventUrl: grpcs://localhost:7053
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.acme.com
+      grpc.keepalive_time_ms: 600000
+    tlsCACerts:
+      path: ../acme-network/crypto-config/peerOrganizations/org1.acme.com/peers/peer0.org1.acme.com/msp/tlscacerts/tlsca.org1.acme.com-cert.pem
+certificateAuthorities:
+  ca.org1.acme.com:
+    url: https://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: ../acme-network/crypto-config/peerOrganizations/org1.acme.com/ca/ca.org1.acme.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca.org1.acme.com
