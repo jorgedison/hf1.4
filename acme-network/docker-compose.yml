@@ -66,8 +66,8 @@ services:
     environment:
       - COUCHDB_USER= couchdb
       - COUCHDB_PASSWORD=couchdb1234
-#    volumes:
-#      - ./couchdb0/:/opt/couchdb/data
+    volumes:
+      - ./couchdb0/:/opt/couchdb/data
     ports:
       - 5984:5984
     container_name: couchdb0
@@ -79,8 +79,8 @@ services:
     environment:
       - COUCHDB_USER= couchdb
       - COUCHDB_PASSWORD=couchdb1234
-#    volumes:
-#      - ./couchdb1/:/opt/couchdb/data
+    volumes:
+      - ./couchdb1/:/opt/couchdb/data
     ports: 
       - 5985:5984
     container_name: couchdb1
@@ -92,8 +92,8 @@ services:
     environment:
       - COUCHDB_USER= couchdb
       - COUCHDB_PASSWORD=couchdb1234
-#    volumes:
-#      - ./couchdb2/:/opt/couchdb/data 
+    volumes:
+      - ./couchdb2/:/opt/couchdb/data 
     ports: 
       - 5986:5984
     container_name: couchdb2
