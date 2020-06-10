@@ -7,7 +7,7 @@ networks:
 
 services:
 
-    orderer_org1:
+    orderer:
         deploy:
             replicas: 1
             restart_policy:
@@ -16,7 +16,7 @@ services:
                 max_attempts: 3
             placement:
                 constraints:
-                    - node.hostname == host0
+                    - node.hostname == ip-172-31-55-153
         image: hyperledger/fabric-orderer
         working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
         command: orderer
