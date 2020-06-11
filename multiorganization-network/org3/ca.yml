@@ -1,0 +1,39 @@
+version: '3.2'
+
+networks:
+    my-net:
+        external: 
+            name: my-net
+
+services:
+
+    ca_org3:
+        networks:
+            my-net:
+                aliases:
+                    - ca_org3
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+            placement:
+                constraints:
+                    - node.hostname == ip-172-31-55-153
+        image: hyperledger/fabric-ca
+        hostname: ca.org3.midominio.com
+        environment:
+            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+            - FABRIC_CA_SERVER_CA_NAME=ca_org3
+            - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org3.midominio.com-cert.pem
+            - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/b019a3386269fe9eaec74ffa604cc7acf94813d8fc9fc413412938adb1722d68_sk
+            - FABRIC_CA_SERVER_TLS_ENABLED=true
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org3.midominio.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/b019a3386269fe9eaec74ffa604cc7acf94813d8fc9fc413412938adb1722d68_sk
+        ports:
+            - "9054:7054"   
+        command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+        volumes:
+            - ../crypto-config/peerOrganizations/org3.midominio.com/ca/:/etc/hyperledger/fabric-ca-server-config
+
