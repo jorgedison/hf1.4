@@ -1,5 +1,6 @@
 /*
  SPDX-License-Identifier: Apache-2.0
+ HF 1.4.4 1.4.7
 */
 
 // ====CHAINCODE EXECUTION SAMPLES (CLI) ==================
