@@ -1,0 +1,56 @@
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# ---------------------------------------------------------------------------
+# "OrdererOrgs" - Definition of organizations managing orderer nodes
+# ---------------------------------------------------------------------------
+OrdererOrgs:
+
+  - Name: Orderer
+    Domain: midominio.com
+
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+
+  - Name: Org1
+    Domain: org1.midominio.com
+
+    CA:
+       Hostname: ca 
+
+    Template:
+      Count: 2
+
+      SANS:
+        - "localhost"
+
+    Users:
+      Count: 1
+
+  - Name: Org2
+    Domain: org2.midominio.com
+    CA:
+       Hostname: ca 
+
+    Template:
+      Count: 2
+      SANS:
+        - "localhost"
+    Users:
+      Count: 1
+
+  - Name: Org3
+    Domain: org3.midominio.com
+    CA:
+       Hostname: ca 
+
+    Template:
+      Count: 2
+      SANS:
+        - "localhost"
+    Users:
+      Count: 1
