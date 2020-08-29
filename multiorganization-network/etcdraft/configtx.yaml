@@ -1,0 +1,173 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+---
+################################################################################
+#
+#   Section: Organizations
+#
+#   - This section defines the different organizational identities which will
+#   be referenced later in the configuration.
+#
+################################################################################
+Organizations:
+
+    # SampleOrg defines an MSP using the sampleconfig.  It should never be used
+    # in production but may be used as a template for other definitions
+    - &OrdererOrg
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: OrdererMSP
+
+        # ID to load the MSP definition as
+        ID: OrdererMSP
+
+        # MSPDir is the filesystem path which contains the MSP configuration
+        MSPDir: crypto-config/ordererOrganizations/midominio.com/msp
+
+    - &Org1
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: Org1MSP
+
+        # ID to load the MSP definition as
+        ID: Org1MSP
+
+        MSPDir: crypto-config/peerOrganizations/org1.midominio.com/msp
+
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: peer0.org1.midominio.com
+              Port: 7051
+
+    - &Org2
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: Org2MSP
+
+        # ID to load the MSP definition as
+        ID: Org2MSP
+
+        MSPDir: crypto-config/peerOrganizations/org2.midominio.com/msp
+
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: peer0.org2.midominio.com
+              Port: 7051
+
+    - &Org3
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: Org3MSP
+
+        # ID to load the MSP definition as
+        ID: Org3MSP
+
+        MSPDir: crypto-config/peerOrganizations/org3.midominio.com/msp
+
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: peer0.org3.midominio.com
+              Port: 7051
+################################################################################
+#
+#   SECTION: Application
+#
+#   - This section defines the values to encode into a config transaction or
+#   genesis block for application related parameters
+#
+################################################################################
+Application: &ApplicationDefaults
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the application side of the network
+    Organizations:
+
+################################################################################
+#
+#   SECTION: Orderer
+#
+#   - This section defines the values to encode into a config transaction or
+#   genesis block for orderer related parameters
+#
+################################################################################
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+    EtcdRaft:
+        Consenters:
+            - Host: orderer.midominio.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer.midominio.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer.midominio.com/tls/server.crt
+            - Host: orderer2.midominio.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer2.midominio.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer2.midominio.com/tls/server.crt
+            - Host: orderer3.midominio.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer3.midominio.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer3.midominio.com/tls/server.crt
+            - Host: orderer4.midominio.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer4.midominio.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer4.midominio.com/tls/server.crt
+            - Host: orderer5.midominio.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer5.midominio.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/midominio.com/orderers/orderer5.midominio.com/tls/server.crt
+    Addresses:
+        - orderer.midominio.com:7050
+        - orderer2.midominio.com:7050
+        - orderer3.midominio.com:7050
+        - orderer4.midominio.com:7050
+        - orderer5.midominio.com:7050
+
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+
+    Kafka:
+        Brokers:
+            - 127.0.01:9092
+
+    Organizations:
+
+################################################################################
+#
+#   Profile
+#
+#   - Different configuration profiles may be encoded here to be specified
+#   as parameters to the configtxgen tool
+#
+################################################################################
+Profiles:
+
+    ThreeOrgsOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Org1
+                    - *Org2
+                    - *Org3
+    ThreeOrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
+                - *Org2
+                - *Org3
