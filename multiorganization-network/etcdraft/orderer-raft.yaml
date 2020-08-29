@@ -1,0 +1,198 @@
+version: '3.3'
+networks:
+    my-net:
+        external:
+            name: my-net
+services:
+    orderer:
+        deploy:
+            replicas: 1
+            restart_policy: 
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+            placement: 
+                constraints: 
+                    - node.hostname == hostanme
+        image: hyperledger/fabric-orderer:latest
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+        command: orderer
+        hostname: orderer.midominio.com
+        environment:
+            - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+            - ORDERER_GENERAL_GENESISMETHOD=file
+            - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/config/genesis.block
+            - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+            - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/msp
+            - ORDERER_GENERAL_TLS_ENABLED=true
+            - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_TLS_ROOTCAS=/var/hyperledger/tls/ca.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/tls/ca.crt]
+        ports:
+            - 7050:7050
+        volumes:
+            - ../crypto-config/ordererOrganizations/midominio.com/users:/var/hyperledger/users
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer.midominio.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer.midominio.com/tls:/var/hyperledger/tls
+            - ../channel-artifacts:/var/hyperledger/config
+        networks:
+            my-net: 
+                aliases: 
+                    - orderer.midominio.com
+    orderer2:
+        deploy:
+            replicas: 1
+            restart_policy: 
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+            placement: 
+                constraints: 
+                    - node.hostname == hostanme
+        image: hyperledger/fabric-orderer:latest
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+        command: orderer
+        hostname: orderer2.midominio.com
+        environment:
+            - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+            - ORDERER_GENERAL_GENESISMETHOD=file
+            - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/config/genesis.block
+            - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+            - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/msp
+            - ORDERER_GENERAL_TLS_ENABLED=true
+            - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_TLS_ROOTCAS=/var/hyperledger/tls/ca.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/tls/ca.crt]
+
+        ports:
+            - 8050:7050
+        volumes:
+            - ../crypto-config/ordererOrganizations/midominio.com/users:/var/hyperledger/users
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer2.midominio.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer2.midominio.com/tls:/var/hyperledger/tls
+            - ../channel-artifacts:/var/hyperledger/config
+        networks:
+            my-net: 
+                aliases: 
+                    - orderer2.midominio.com
+    orderer3:
+        deploy:
+            replicas: 1
+            restart_policy: 
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+            placement: 
+                constraints: 
+                    - node.hostname == hostanme
+        image: hyperledger/fabric-orderer:latest
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+        command: orderer
+        hostname: orderer3.midominio.com
+        environment:
+            - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+            - ORDERER_GENERAL_GENESISMETHOD=file
+            - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/config/genesis.block
+            - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+            - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/msp
+            - ORDERER_GENERAL_TLS_ENABLED=true
+            - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_TLS_ROOTCAS=/var/hyperledger/tls/ca.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/tls/ca.crt]
+
+        ports:
+            - 9050:7050
+        volumes:
+            - ../crypto-config/ordererOrganizations/midominio.com/users:/var/hyperledger/users
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer3.midominio.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer3.midominio.com/tls:/var/hyperledger/tls
+            - ../channel-artifacts:/var/hyperledger/config
+        networks:
+            my-net: 
+                aliases: 
+                    - orderer3.midominio.com 
+    orderer4:
+        deploy:
+            replicas: 1
+            restart_policy: 
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+            placement: 
+                constraints: 
+                    - node.hostname == hostanme
+        image: hyperledger/fabric-orderer:latest
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+        command: orderer
+        hostname: orderer4.midominio.com
+        environment:
+            - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+            - ORDERER_GENERAL_GENESISMETHOD=file
+            - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/config/genesis.block
+            - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+            - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/msp
+            - ORDERER_GENERAL_TLS_ENABLED=true
+            - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_TLS_ROOTCAS=/var/hyperledger/tls/ca.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/tls/ca.crt]
+        ports:
+            - 10050:7050
+        volumes:
+            - ../crypto-config/ordererOrganizations/midominio.com/users:/var/hyperledger/users
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer4.midominio.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer4.midominio.com/tls:/var/hyperledger/tls
+            - ../channel-artifacts:/var/hyperledger/config
+        networks:
+            my-net: 
+                aliases: 
+                    - orderer4.midominio.com
+    orderer5:
+        deploy:
+            replicas: 1
+            restart_policy: 
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+            placement: 
+                constraints: 
+                    - node.hostname == hostanme
+        image: hyperledger/fabric-orderer:latest
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+        command: orderer
+        hostname: orderer5.midominio.com
+        environment:
+            - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+            - ORDERER_GENERAL_GENESISMETHOD=file
+            - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/config/genesis.block
+            - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+            - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/msp
+            - ORDERER_GENERAL_TLS_ENABLED=true
+            - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_TLS_ROOTCAS=/var/hyperledger/tls/ca.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/tls/server.crt
+            - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/tls/server.key
+            - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/tls/ca.crt]
+        ports:
+            - 11050:7050
+        volumes:
+            - ../crypto-config/ordererOrganizations/midominio.com/users:/var/hyperledger/users
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer5.midominio.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/midominio.com/orderers/orderer5.midominio.com/tls:/var/hyperledger/tls
+            - ../channel-artifacts:/var/hyperledger/config
+        networks:
+            my-net: 
+                aliases: 
+                    - orderer5.midominio.com
